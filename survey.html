@@ -1,6 +1,6 @@
 <html>
     <head>
-        <link rel = "stylesheet" herf = "main_style.css">
+        <link rel = "stylesheet" href = "main_style.css">
         <style>
             .options {
                 margin: 1rem;
@@ -17,18 +17,60 @@
 
             body{text-align: center;}
 
+            button{
+                font-size: 50pt;
+            }
+            #question{
+                padding: 70px;
+            }
+
 
             </style>
     </head>
-    <body>
+    <body class = "main">
 
 
-        
-        Do you have access to transportation?
-        <div class="options">
-            <div class="option">YES</div>
-            <div class="option">NO</div>
-        </div>
+                
+
+        <div id="question-container">
+            <div id="question">Question will appear here</div>
+            <div class="options">
+                <button class="option btn" onclick="nextQuestion('yes')">Yes</button>
+            <button class="option btn" onclick="nextQuestion('no')">No</button>
+            </div>
+            
+          </div>
+
+        <script>
+            questions = [
+            "Can you drive?", 
+            "Can you walk?",
+            "Do you rely on medical devices or medications?",
+            "Do you have family or other people that can help you?",
+            ];
+
+            answerdata = [];
+
+
+            let count = 0;
+
+            function displayQuestion() {
+            if (count < questions.length) {
+                document.getElementById('question').innerText = questions[count];
+            } else {
+                document.getElementById('question-container').innerHTML = "<h2>done!</h2>";
+            }
+            }
+
+            function nextQuestion(answer) {
+                answerdata[count] = answer;
+                // alert(answer);
+                count++;
+                displayQuestion();
+            }
+
+            displayQuestion();
+        </script>
   
   
   
