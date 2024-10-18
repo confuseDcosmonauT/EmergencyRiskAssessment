@@ -38,8 +38,7 @@
                 <button class="option btn" onclick="nextQuestion('yes')">Yes</button>
             <button class="option btn" onclick="nextQuestion('no')">No</button>
             </div>
-            
-          </div>
+        </div>
 
         <script>
             questions = [
@@ -58,18 +57,35 @@
             if (count < questions.length) {
                 document.getElementById('question').innerText = questions[count];
             } else {
-                document.getElementById('question-container').innerHTML = "<h2>done!</h2>";
+                document.getElementById('question-container').innerHTML = "Are you at risk?";
+                riskscore = 0
+                for (let i = 0; i < answerdata.length; i++) {
+                    if(answerdata[i] = 'no'){
+                        riskscore += 10
+                    }
+                }
+                
+                if(riskscore >= 30){
+                    document.getElementById('question-container').innerHTML = "RISK!!!!";
+                    window.location.href = "atrisk.html";
+                    
+                }
+                else{
+                    document.getElementById('question-container').innerHTML = "ur good";
+                }
+                
             }
             }
 
             function nextQuestion(answer) {
                 answerdata[count] = answer;
-                // alert(answer);
                 count++;
                 displayQuestion();
             }
 
             displayQuestion();
+            
+
         </script>
   
   
