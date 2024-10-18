@@ -1,12 +1,27 @@
 <html>
     <head>
-        <link rel = "stylesheet" herf = "main_style.css">
+        <link rel = "stylesheet" href = "main_style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     </head>
-    <body>
-        <div class = "main" onclick = "click()">
-            <div onclick = "skip()">Skip</div>
-            Can you see? If yes please tap the screen twice!
+    <body class = "main" onclick = "two_click()">
+        <div>
+            <audio autoplay>
+                <source src="areyoublind.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+              </audio>
+
+            <div onclick = "skip()" class= "skip">Skip</div>
+
+            Double tap the screen if you are blind
+
+            Click the skip button if you are not
+
+            <div id = "display">display</div>
         </div>
+
+        
     </body>
     <script>
         let blind = "no"
@@ -15,9 +30,9 @@
             window.location.href = "survey.html";
         }
 
-        function click(){
+        function two_click(){
             counter++
-            if (counter == 2){
+            if (counter >= 2){
                 blind = "yes"
             }
             document.getElementById("display").innerText = blind;
