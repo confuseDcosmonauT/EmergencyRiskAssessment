@@ -3,16 +3,24 @@
         <link rel = "stylesheet" herf = "main_style.css">
     </head>
     <body>
-        <div class = "main" >
-        <div onclick = "skip()">Skip</div>
-        Can you see? If yes please tap the screen twice!
+        <div class = "main" onclick = "click()">
+            <div onclick = "skip()">Skip</div>
+            Can you see? If yes please tap the screen twice!
         </div>
-        
     </body>
     <script>
+        let blind = "no"
+        let counter = 0
         function skip(){
             window.location.href = "survey.html";
         }
 
+        function click(){
+            counter++
+            if (counter == 2){
+                blind = "yes"
+            }
+            document.getElementById("display").innerText = blind;
+        }
     </script>
 </html>
