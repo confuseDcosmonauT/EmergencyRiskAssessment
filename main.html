@@ -4,21 +4,32 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+        <style>
+            button {
+                display: inline-block;
+                border: 1px solid black;
+                padding: 1rem 1rem;
+                vertical-align: middle;
+                font-size: 40px;
+            }
+        </style>
     </head>
     <body class = "main" onclick = "two_click()">
-        <div>
+        <div style="font-size: 70px; padding: 70px; ">
             <audio autoplay>
                 <source src="areyoublind.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
               </audio>
+            
+            <!--<div onclick = "skip()" class= "skip">Skip</div>-->
+            <button onclick="skip()">Skip</button>
 
-            <div onclick = "skip()" class= "skip">Skip</div>
-
+            <br>
             Double tap the screen if you are blind
+            <br><br>
+            <b>If you can see, click the skip button </b>
 
-            Click the skip button if you are not
-
-            <div id = "display">display</div>
+            <!-- <div id = "display">display</div> -->
         </div>
 
         
