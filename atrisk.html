@@ -27,8 +27,8 @@
             position: absolute;
             top: 10px;
             left: 10px;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
         }
 
         .translate-container {
@@ -112,18 +112,22 @@
             const parameters = new URLSearchParams(window.location.search);
             if (parameters.has('high_risk')) {
                 document.body.style.backgroundColor = "#88342b";
+                document.getElementById('subtext').innerHTML = "We will send your information to local disaster relief organizations";
             }
             if (parameters.has('medium_risk')) {
                 document.body.style.backgroundColor = "#ca7e37";
                 document.body.style.color = "#100e45";
                 document.getElementById("riskBox").style.backgroundColor = "#f5b342";
                 document.getElementById('alerttext').innerHTML = " Medium Risk";
+                document.getElementById('subtext').innerHTML = "We will send your information to local disaster relief organizations to keep on watch in case of change in weather";
             }
             if (parameters.has('low_risk')) {
                 document.body.style.backgroundColor = "#27374D";
                 document.body.style.color = "#7db0f7";
                 document.getElementById("riskBox").style.backgroundColor = "#36274d";
                 document.getElementById('alerttext').innerHTML = " Low Risk";
+                document.getElementById('subtext').innerHTML = "You are in a safe zone";
+
             }
         }
     </script>
@@ -134,7 +138,7 @@
                 <div id="riskBox">
                     <div class="resizable-div">
                         <p class="resizable-text" id="alerttext">YOU ARE AT RISK!</p>
-                        <p class="resizable-text" style="font-size: 2vw">We will send your information to local disaster relief organizations...</p>
+                        <p class="resizable-text" id="subtext" style="font-size: 2vw">We will send your information to local disaster relief organizations...</p>
                     </div>
                 </div>
             </div>
@@ -144,6 +148,8 @@
             <div class="column">
                 <div id="map"></div>
                 <script>
+
+
                     var map = L.map('map').setView([26.076772, -80.2390038], 10);
                     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         maxZoom: 19,
@@ -156,6 +162,22 @@
                         transparent: true,
                         attribution: '&copy; <a href="https://www.weather.gov/copyright">NOAA</a>'
                     }).addTo(map);
+
+                    var markerAdmin = L.marker([26.0802, -80.2508]).addTo(map)
+                        .bindPopup(`You are here`)
+                        .openPopup();
+
+                    var markerPersonOne = L.marker([26.331095, -80.289170]).addTo(map)
+                        .bindPopup(`Grace W. is here`)
+                        .openPopup();
+
+                    var markerPersonTwo =  L.marker([26.071512, -80.229861]).addTo(map)
+                        .bindPopup(`Polly W. is here`)
+                        .openPopup();
+
+                    var markerPersonThree =  L.marker([26.0, -80.2508]).addTo(map)
+                        .bindPopup(`Cat is here`)
+                        .openPopup();
                 </script>
             </div>
         </div>
@@ -163,12 +185,7 @@
         <div class="text-center my-4">
             <form onsubmit="getSelectedValue(event)" class="form-inline justify-content-center">
                 <label for="towns" class="mr-2">Choose a city:</label>
-                <select id="towns" name="towns" class="form-control mr-2">
-                    <option value="Tampa">Tampa</option>
-                    <option value="Melbourne">Melbourne</option>
-                    <option value="Keywest">Key West</option>
-                    <option value="Miami">Miami</option>
-                </select>
+                <select id="towns" name="towns" class="form-control mr-2"></select>
                 <input type="submit" value="Submit" class="btn btn-primary">
             </form>
 
@@ -240,7 +257,7 @@
                         document.getElementById('alert').innerText = "Unable to retrieve location.";
                     }
 
-                    function displayAlerts(alerts) {
+                     function displayAlerts(alerts) {
                         const alertDiv = document.getElementById('alert');
                         alertDiv.innerHTML = '';
 
@@ -249,11 +266,13 @@
                             const properties = alert.properties;
                             const headline = properties.headline || 'No headline available';
                             const instruction = properties.instruction || 'No instructions provided';
+                            
                             const cityName = headline.split(" ")[headline.split(" ").length - 2];
 
                             if (!atRiskCities.includes(cityName)) {
                                 atRiskCities.push(cityName);
-                            }
+                            } 
+                            
 
                             if (headline.toLowerCase().includes(selectedValue.toLowerCase()) && prevheadline != headline) {
                                 const alertItem = document.createElement('div');
