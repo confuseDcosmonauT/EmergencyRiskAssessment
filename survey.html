@@ -170,16 +170,20 @@
                     }
                 }
                 
-                if(riskscore >= 30){
+                /// here is dropdown
+                
+                
+                if(riskscore >= 20){
                     //document.getElementById('question-container').innerHTML = "RISK!!!!";
-                    window.location.href = "atrisk.html";
-                    
+                    window.location.href = "atrisk.html?high_risk=1";
                 }
                 else if(riskscore >= 10){
                     document.getElementById('question-container').innerHTML = "medium risk // on watch";
+                    window.location.href = "atrisk.html?medium_risk=1";
                 }
                 else{
-                    document.getElementById('question-container').innerHTML = "ur good";
+                    document.getElementById('question-container').innerHTML = "your safe!";
+                    window.location.href = "atrisk.html?low_risk=1";
                 }
                 
                 window.addUser(window.db, answerdata[0], answerdata[1], answerdata[2], answerdata[3], name);
