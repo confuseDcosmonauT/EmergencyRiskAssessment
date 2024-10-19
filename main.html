@@ -17,19 +17,17 @@
     <body class = "main" onclick = "two_click()">
         <div style="font-size: 70px; padding: 70px; ">
             <audio autoplay>
-                <source src="areyoublind.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-              </audio>
-            
-            <!--<div onclick = "skip()" class= "skip">Skip</div>-->
-            <button onclick="skip()">Skip</button>
+                <source src ="areyoublind.mp3" type = "audio/mpeg">
+                <source src="areyoublind.ogg" type="audio/ogg">
+                Your browser doesnot support the audio element. 
+            </audio>
+
+            <div onclick = "skip()" class= "skip">Skip</div>
 
             <br>
             Double tap the screen if you are blind
             <br><br>
             <b>If you can see, click the skip button </b>
-
-            <!-- <div id = "display">display</div> -->
         </div>
 
         
@@ -46,7 +44,6 @@
             if (counter >= 2){
                 blind = "yes"
             }
-            document.getElementById("display").innerText = blind;
         }
     </script>
 </html>
