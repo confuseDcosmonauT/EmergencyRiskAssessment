@@ -6,8 +6,20 @@
         <div>
             admins view
         </div>
-        <div class = "table_display"></div>
-        <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Connections</th>
+                    <th>Drive</th>
+                    <th>Tools</th>
+                    <th>Walk</th>
+                </tr>
+            </thead>
+            <tbody class="table_display">
+                <!-- Rows will be dynamically added here -->
+            </tbody>
+        </table>
+        <div onclick="retrieveUser()">
             refresh
         </div>
 
@@ -35,9 +47,7 @@
           const app = initializeApp(firebaseConfig);
           const db = getFirestore(app);
 
-          window.db = db;
-
-          window.retrieveUser = async function(db, drive_ability, walk_ability, connections_ability, tools_ability) {
+            async function retrieveUser() {
             const tableBody = document.querySelector(".table_display")
             tableBody.innerHTML = "";
 
@@ -46,17 +56,29 @@
                 const data = doc.data();
                 const row = document.createElement("tr");
 
+                const connectionsCell = document.createElement("td");
+                connectionsCell.textContent = data.connections || "N/A";
+                row.appendChild(connectionsCell);
+
+                const driveCell = document.createElement("td");
+                driveCell.textContent = data.drive || "N/A";
+                row.appendChild(driveCell);
+
+                const toolsCell = document.createElement("td");
+                toolsCell.textContent = data.tools || "N/A";
+                row.appendChild(toolsCell);
+
+                const walkCell = document.createElement("td");
+                walkCell.textContent = data.walk || "N/A";
+                row.appendChild(walkCell);
+
+                tableBody.appendChild(row);
+
             });
           }
+          retrieveUser()
 
-      </script>
-
-      <script>
-        function generateTable(){
-            
-        }
-
-        generateTable()
+          window.onload = retrieveUser(); 
       </script>
 
     </body>
