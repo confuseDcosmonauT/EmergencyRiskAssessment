@@ -4,7 +4,7 @@
         <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"></script>
         <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-              <style>
+        <style>
             .options {
                 margin: 1rem;
                 padding: 2rem 2rem;
@@ -18,31 +18,26 @@
                 vertical-align: middle;
             }
 
-            .logo{
-                align-items: center;
-            }
-
             body{text-align: center;}
 
             button{
-                font-size: 28pt;
+                font-size: 50pt;
                 background-color: #223044;
                 color: #fcffd9;
                 border-radius: 3px;
                 width:fit-content;
                 height:fit-content;
                 border: none;
-
             }
-
 
             button:hover{
                 background-color: 526D82;
                 color: DDE6ED;
                 transition: background-color 0.7s ease;
             }
+
             #question{
-                padding: 5px;
+                padding: 70px;
             }
 
             #question-container {
@@ -54,27 +49,46 @@
             }
             #nameInput {
             width: 300px;
-            height: 75px;  
+            height: 80px;  
             font-size: 28px; 
-            
-            #name {
-                align-items: center;
             }
-
+            #towns{
+                font-size:70px;
             }
             #nameInput::placeholder {
             color: #061121; /* Change placeholder text color */
             }
-
+            
             </style>
     </head>
-    <body class = "main">
-        
+    <body class = "main">              
         <header>
             <a href="main.html">
                 <img src="logo.png" alt="logo" style="width:150px;height:150px;">
               </a> 
-          </header>
+              <div class="container mt-4">
+                <div class="row justify-content-end">
+                    <!-- Google Translate Element aligned to the right -->
+                    <div class="col-auto">
+                        <div id="google_translate_element"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Google Translate API -->
+            <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        
+            <script type="text/javascript">
+                function googleTranslateElementInit() {
+                    new google.translate.TranslateElement({
+                        pageLanguage: 'en',
+                        includedLanguages: 'en,es,ht,vi,ar,pt,zh-CN,ru',
+                        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                    }, 'google_translate_element');
+                }
+            </script>
+            </header>
+
 
           <div id="name">
             <input type="text" id="nameInput" placeholder="Enter full name">
@@ -83,8 +97,8 @@
         <div id="question-container">
             <div id="question">Question will appear here</div>
             <div class="options">
-                <button class="option btn" onclick="nextQuestion('yes')">Yes</button>
-            <button class="option btn" onclick="nextQuestion('no')">No</button>
+                <button class="optionbtn" onclick="nextQuestion('yes')">Yes</button>
+            <button class="optionbtn" onclick="nextQuestion('no')">No</button>
             </div>
         </div>
 
@@ -141,7 +155,7 @@
 
         
         <form onsubmit="getSelectedValue(event)" id="findtown">
-            <label for="towns">Choose a city:</label>
+            <label for="towns">I live in</label>
             <select id="towns" name="towns">
                 <option value="Sarasota">Sarasota</option>
                 <option value="Gibsonton">Gibsonton</option>
@@ -174,8 +188,8 @@
 
             function showquestions() {
                 event.preventDefault(); // Prevent form submission to allow custom behavior
-                const selectElement = document.getElementById('towns');
-                const town = selectElement.value;
+                selectElement = document.getElementById('towns');
+                town = selectElement.value;
                 console.log('Selected town:', town);
 
 
@@ -204,7 +218,7 @@
                 //document.getElementById('question-container').innerHTML = "Are you at risk?";
                 riskscore = 0
                 for (let i = 0; i < answerdata.length; i++) {
-                    if(i >= 2){
+                    if(i <= 2){
                         if(answerdata[i] == 'no'){
                         riskscore += 10
                         }
@@ -214,21 +228,25 @@
                         riskscore += 10
                         }
                     }
+                    console.log("question " + i + " " + riskscore)
                 }
 
                 
-                if(town == "Sarasota" || town == "Miami" || town == "Gibsonton" || town == "Keywest"){
+                if(town === "Sarasota" || town == "Miami" || town == "Gibsonton" || town == "Keywest"){
                     if(riskscore >= 20){
                     //document.getElementById('question-container').innerHTML = "RISK!!!!";
+                    console.log(riskscore)
                     window.location.href = "atrisk.html?high_risk=1";
                     }
                     else{
                         //document.getElementById('question-container').innerHTML = "medium risk // on watch";
+                        console.log(riskscore)
                         window.location.href = "atrisk.html?medium_risk=1";
                     }
                 }
                 else{
                     //document.getElementById('question-container').innerHTML = "your safe!";
+                    console.log(riskscore)
                     window.location.href = "atrisk.html?low_risk=1";
                 }
         
