@@ -8,7 +8,7 @@ var audio_connections = new Audio ("family.ogg");
 var audio_tools = new Audio ("tools.ogg");
 
 function skip() {
-    window.location.href = "survey_ONE.html";
+    window.location.href = "survey.html";
 }
 
 function two_click() {
