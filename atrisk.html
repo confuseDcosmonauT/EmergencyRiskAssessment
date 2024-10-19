@@ -167,17 +167,7 @@
                         .bindPopup(`You are here`)
                         .openPopup();
 
-                    var markerPersonOne = L.marker([26.331095, -80.289170]).addTo(map)
-                        .bindPopup(`Grace W. is here`)
-                        .openPopup();
-
-                    var markerPersonTwo =  L.marker([26.071512, -80.229861]).addTo(map)
-                        .bindPopup(`Polly W. is here`)
-                        .openPopup();
-
-                    var markerPersonThree =  L.marker([26.0, -80.2508]).addTo(map)
-                        .bindPopup(`Cat is here`)
-                        .openPopup();
+                    
                 </script>
             </div>
         </div>
@@ -189,7 +179,7 @@
                 <input type="submit" value="Submit" class="btn btn-primary">
             </form>
 
-            <div class="alerts mt-4" style="font-size: medium;">
+            <div class="alerts mt-4" style="font-size: medium;" hidden="true" id="weatherTog">
                 <table class="table">
                     <thead>
                         <tr>
@@ -219,6 +209,7 @@
 
                     function getSelectedValue(event) {
                         event.preventDefault();
+                        document.getElementById("weatherTog").hidden=false;
                         const dropdown = document.getElementById("towns");
                         selectedValue = dropdown.value;
                         getLocation();
@@ -265,7 +256,8 @@
                         alerts.forEach(alert => {
                             const properties = alert.properties;
                             const headline = properties.headline || 'No headline available';
-                            const instruction = properties.instruction || 'No instructions provided';
+                            const headlineDisp = headline.substring(0, headline.indexOf(" issued "))
+                            const instruction = properties.instruction || '';
                             
                             const cityName = headline.split(" ")[headline.split(" ").length - 2];
 
@@ -274,15 +266,15 @@
                             } 
                             
 
-                            if (headline.toLowerCase().includes(selectedValue.toLowerCase()) && prevheadline != headline) {
+                            if (headline.toLowerCase().includes(selectedValue.toLowerCase()) && prevheadline != headlineDisp) {
                                 const alertItem = document.createElement('div');
                                 alertItem.className = 'alert-item';
                                 alertItem.innerHTML = `
-                                    <strong>${headline}</strong>
+                                    <strong>${headlineDisp}</strong>
                                     <p>${instruction}</p>
                                 `;
                                 alertDiv.appendChild(alertItem);
-                                prevheadline = headline;
+                                prevheadline = headlineDisp;
                             }
                             fillDropdown();
                         });
