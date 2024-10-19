@@ -1,3 +1,4 @@
+
 <html>
     <head>
         <link rel = "stylesheet" href = "main_style.css">
@@ -18,26 +19,31 @@
                 vertical-align: middle;
             }
 
+            .logo{
+                align-items: center;
+            }
+
             body{text-align: center;}
 
             button{
-                font-size: 50pt;
+                font-size: 28pt;
                 background-color: #223044;
                 color: #fcffd9;
                 border-radius: 3px;
                 width:fit-content;
                 height:fit-content;
                 border: none;
+                
             }
+
 
             button:hover{
                 background-color: 526D82;
                 color: DDE6ED;
                 transition: background-color 0.7s ease;
             }
-
             #question{
-                padding: 70px;
+                padding: 5px;
             }
 
             #question-container {
@@ -49,19 +55,28 @@
             }
             #nameInput {
             width: 300px;
-            height: 80px;  
+            height: 75px;  
             font-size: 28px; 
+            
+            #name {
+                align-items: center;
             }
-            #towns{
-                font-size:70px;
+
             }
             #nameInput::placeholder {
             color: #061121; /* Change placeholder text color */
             }
-            
+
+            #towns{
+                font-size: 75px;
+                font-family: causten;
+            }
+
             </style>
+
+        <script src = "main_script.js"></script>
     </head>
-    <body class = "main">              
+    <body class = "main">
         <header>
             <a href="main.html">
                 <img src="logo.png" alt="logo" style="width:150px;height:150px;">
@@ -89,8 +104,7 @@
             </script>
             </header>
 
-
-          <div id="name">
+          <div id="name" class = "name">
             <input type="text" id="nameInput" placeholder="Enter full name">
           </div>                
 
@@ -101,7 +115,6 @@
             <button class="optionbtn" onclick="nextQuestion('no')">No</button>
             </div>
         </div>
-
 
         <script type="module">
             // Import the functions you need from the SDKs you need
@@ -131,6 +144,7 @@
 
           window.addUser = async function(db, drive_ability, walk_ability, connections_ability, tools_ability, user_name) {
               try {
+                console.log("work");
                   const docRef = await addDoc(collection(db, "Users"), {
                     drive: drive_ability,
                     walk: walk_ability,
@@ -146,32 +160,24 @@
 
       </script>
 
-        <audio id="myAudio">
-            <source src="doyouhavecar.mp3" type="audio/mpeg">
-            <source src="doyouhavecar.ogg" type="audio/ogg">
-            Your browser does not support the audio element.
-        </audio>
-
-
-        
-        <form onsubmit="getSelectedValue(event)" id="findtown">
-            <label for="towns">I live in</label>
-            <select id="towns" name="towns">
-                <option value="Sarasota">Sarasota</option>
-                <option value="Gibsonton">Gibsonton</option>
-                <option value="Keywest">Key West</option>
-                <option value="Miami">Miami</option>
-                <option value="Lakeland">Lakeland</option>
-            </select>
-            <br></br>
-            <button onclick="showquestions()">Submit</button>
-            <!-- <input type="submit" value="Submit"></input> -->
-        </form>
-
-
+      <form onsubmit="getSelectedValue(event)" id="findtown">
+        <label for="towns">I live in</label>
+        <select id="towns" name="towns">
+            <option value="Sarasota">Sarasota</option>
+            <option value="Gibsonton">Gibsonton</option>
+            <option value="Keywest">Key West</option>
+            <option value="Miami">Miami</option>
+            <option value="Lakeland">Lakeland</option>
+        </select>
+        <br>
+        <button onclick="showquestions()">Submit</button>
+        <!-- <input type="submit" value="Submit"></input> -->
+    </form>
 
         <script>
             
+            check_if_blind();
+
             questions = [
             "Can you drive?", 
             "Can you walk?",
@@ -184,110 +190,83 @@
 
             let count = 0;
             let name = ""
-            let town = ""
+
 
             function showquestions() {
                 event.preventDefault(); // Prevent form submission to allow custom behavior
                 selectElement = document.getElementById('towns');
                 town = selectElement.value;
                 console.log('Selected town:', town);
-
-
-
                 document.getElementById('question-container').style.display = 'block';
                 document.getElementById('name').style.display = 'none';
                 document.getElementById('findtown').style.display = 'none';
                 const name_input = document.getElementById("nameInput");
                 name = name_input.value;
+                read_blind();
             }
 
             function displayQuestion() {
-                /* 
-                // this code breaks the questionare
-                const audio = document.getElementById('myAudio');
-
-                if(blind ){ // how to get blind variable from main.html
-                    if(count = 0){
-                        audio.play(); // read out first audio prompt
-                    }
-                }
-            */
-            if (count < questions.length) {
-                document.getElementById('question').innerText = questions[count];
-            } else {
-                //document.getElementById('question-container').innerHTML = "Are you at risk?";
-                riskscore = 0
-                for (let i = 0; i < answerdata.length; i++) {
-                    if(i <= 2){
-                        if(answerdata[i] == 'no'){
-                        riskscore += 10
-                        }
-                    }
-                    else{
-                        if(answerdata[i] == 'yes'){
-                        riskscore += 10
-                        }
-                    }
-                    console.log("question " + i + " " + riskscore)
-                }
-
                 
-                if(town === "Sarasota" || town == "Miami" || town == "Gibsonton" || town == "Keywest"){
-                    if(riskscore >= 20){
-                    //document.getElementById('question-container').innerHTML = "RISK!!!!";
-                    console.log(riskscore)
-                    window.location.href = "atrisk.html?high_risk=1";
+                if (count < questions.length) {
+                    document.getElementById('question').innerText = questions[count];
+                } else {
+                    //document.getElementById('question-container').innerHTML = "Are you at risk?";
+                    riskscore = 0
+                    for (let i = 0; i < answerdata.length; i++) {
+                        if(i >= 2){
+                            if(answerdata[i] == 'no'){
+                            riskscore += 10
+                            }
+                        }
+                        else{
+                            if(answerdata[i] == 'yes'){
+                            riskscore += 10
+                            }
+                        }
                     }
-                    else{
-                        //document.getElementById('question-container').innerHTML = "medium risk // on watch";
+                    
+                    if(town === "Sarasota" || town == "Miami" || town == "Gibsonton" || town == "Keywest"){
+                        if(riskscore >= 20){
+                        //document.getElementById('question-container').innerHTML = "RISK!!!!";
                         console.log(riskscore)
-                        window.location.href = "atrisk.html?medium_risk=1";
+                        window.location.href = "atrisk.html?high_risk=1";
+                        }
+                        else{
+                            //document.getElementById('question-container').innerHTML = "medium risk // on watch";
+                            console.log(riskscore)
+                            window.location.href = "atrisk.html?medium_risk=1";
+                        }
                     }
+                    else{
+                        //document.getElementById('question-container').innerHTML = "your safe!";
+                        console.log(riskscore)
+                        window.location.href = "atrisk.html?low_risk=1";
+                    }
+                    
                 }
-                else{
-                    //document.getElementById('question-container').innerHTML = "your safe!";
-                    console.log(riskscore)
-                    window.location.href = "atrisk.html?low_risk=1";
-                }
-        
-
-                
-                
-                
+                console.log("went");
                 window.addUser(window.db, answerdata[0], answerdata[1], answerdata[2], answerdata[3], name);
-
+                console.log("working");
             }
+
+            function getSelectedValue(event) {
+                event.preventDefault();  // Prevent form submission
+                const dropdown = document.getElementById("towns");  // Get the dropdown element
+                selectedValue = dropdown.value;  // Get the selected value
+                // getLocation();  // Fetch weather alerts based on selected city
             }
-
-            let selectedValue = "";
-
-                function getSelectedValue(event) {
-                    event.preventDefault();  // Prevent form submission
-                    const dropdown = document.getElementById("towns");  // Get the dropdown element
-                    selectedValue = dropdown.value;  // Get the selected value
-                    // getLocation();  // Fetch weather alerts based on selected city
-                }
-
-
-            
 
             function nextQuestion(answer) {
                 answerdata[count] = answer;
                 count++;
+                read_blind();
+                console.log("go!")
                 displayQuestion();
             }
-
+            
             displayQuestion();
         
         </script>
-
-
-            
-
-
-
-
-
   
     </body>
 </html>
