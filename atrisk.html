@@ -1,271 +1,277 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="main_style.css">
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-   <style>
-       * {
-           box-sizing: border-box;
-       }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main_style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
+        body {
+            position: relative;
+        }
 
-       body {
-           position: relative;
-       }
+        .header {
+            position: relative;
+            padding: 1rem 0;
+        }
 
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 50px;
+            height: 50px;
+        }
 
-       .header {
-           position: relative;
-           padding: 1rem 0;
-       }
+        .translate-container {
+            position: absolute; /* Change to absolute for better control */
+            top: 10px; /* Match this value with the logo's top position */
+            right: 10px; /* Position it at the right */
+        }
 
+        .column {
+            width: 100%;
+            padding: 1rem;
+        }
 
-       .logo {
-           position: absolute;
-           top: 10px;
-           left: 10px;
-           width: 50px;
-           height: 50px;
-       }
+        .resizable-div {
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-bottom: 20px;
+            text-align: center;
+        }
 
+        .resizable-text {
+            font-size: 5vw;
+            margin: 0;
+        }
 
-       .column {
-           width: 100%;
-           padding: 1rem;
-       }
+        #riskBox {
+            background-color: #7c4c4c;
+            padding: 1rem;
+        }
 
+        #map {
+            width: 100%;
+            height: 600px;
+            margin-top: 1rem;
+        }
 
-       .resizable-div {
-           width: 100%;
-           height: auto;
-           display: flex;
-           flex-direction: column;
-           align-items: center;
-           justify-content: center;
-           color: white;
-           margin-bottom: 20px;
-           text-align: center;
-       }
+        .table thead th {
+            background-color: #7c4c4c;
+            color: #ffffff;
+        }
 
-
-       .resizable-text {
-           font-size: 5vw;
-           margin: 0;
-       }
-
-
-       #riskBox {
-           background-color: #7c4c4c;
-           padding: 1rem;
-       }
-
-
-       #map {
-           width: 100%;
-           height: 600px;
-           margin-top: 1rem;
-       }
-
-
-       .table thead th {
-           background-color: #7c4c4c;
-           color: #ffffff;
-       }
-
-
-       .alert-item {
-           margin-bottom: 3rem;
-       }
-   </style>
+        .alert-item {
+            margin-bottom: 3rem;
+        }
+    </style>
 </head>
 
-
 <body class="main">
-   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <header class="header text-center my-3">
+        <a href="main.html">
+            <img src="logo.png" alt="logo" class="logo">
+        </a>
+        
+        <div class="translate-container" id="google_translate_element"></div>
+    </header>
 
+    <!-- Google Translate API -->
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-   <script>
-       what_risk();
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,es,ht,vi,ar,pt,zh-CN,ru',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
+    <script>
+        what_risk();
 
-       function what_risk() {
-           const parameters = new URLSearchParams(window.location.search);
-           if (parameters.has('high_risk')) {
-               document.body.style.backgroundColor = "#88342b";
-           }
-           if (parameters.has('medium_risk')) {
-               document.body.style.backgroundColor = "#ca7e37";
-               document.body.style.color = "#100e45";
-               document.getElementById("riskBox").style.backgroundColor = "#f5b342";
-               document.getElementById('alerttext').innerHTML = " Medium Risk";
-           }
-           if (parameters.has('low_risk')) {
-               document.body.style.backgroundColor = "#27374D";
-               document.body.style.color = "#7db0f7";
-               document.getElementById("riskBox").style.backgroundColor = "#36274d";
-               document.getElementById('alerttext').innerHTML = " Low Risk";
-           }
-       }
-   </script>
+        function what_risk() {
+            const parameters = new URLSearchParams(window.location.search);
+            if (parameters.has('high_risk')) {
+                document.body.style.backgroundColor = "#88342b";
+            }
+            if (parameters.has('medium_risk')) {
+                document.body.style.backgroundColor = "#ca7e37";
+                document.body.style.color = "#100e45";
+                document.getElementById("riskBox").style.backgroundColor = "#f5b342";
+                document.getElementById('alerttext').innerHTML = " Medium Risk";
+            }
+            if (parameters.has('low_risk')) {
+                document.body.style.backgroundColor = "#27374D";
+                document.body.style.color = "#7db0f7";
+                document.getElementById("riskBox").style.backgroundColor = "#36274d";
+                document.getElementById('alerttext').innerHTML = " Low Risk";
+            }
+        }
+    </script>
 
+    <div class="container">
+        <div class="row">
+            <div class="column">
+                <div id="riskBox">
+                    <div class="resizable-div">
+                        <p class="resizable-text" id="alerttext">YOU ARE AT RISK!</p>
+                        <p class="resizable-text" style="font-size: 2vw">We will send your information to local disaster relief organizations...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-   <header class="header text-center my-3">
-       <a href="main.html">
-           <img src="logo.png" alt="logo" class="logo">
-       </a>
-   </header>
+        <div class="row">
+            <div class="column">
+                <div id="map"></div>
+                <script>
+                    var map = L.map('map').setView([26.076772, -80.2390038], 10);
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    }).addTo(map);
 
+                    var radarLayer = L.tileLayer.wms("https://mapservices.weather.noaa.gov:443/eventdriven/services/radar/radar_base_reflectivity/MapServer/WmsServer?", {
+                        layers: '1',
+                        format: 'image/png',
+                        transparent: true,
+                        attribution: '&copy; <a href="https://www.weather.gov/copyright">NOAA</a>'
+                    }).addTo(map);
+                </script>
+            </div>
+        </div>
 
-   <div class="container">
-       <div class="row">
-           <div class="column">
-               <div id="riskBox">
-                   <div class="resizable-div">
-                       <p class="resizable-text" id="alerttext">YOU ARE AT RISK!</p>
-                       <p class="resizable-text" style="font-size: 2vw">We will send your information to local disaster relief organizations...</p>
-                   </div>
-               </div>
-           </div>
-       </div>
+        <div class="text-center my-4">
+            <form onsubmit="getSelectedValue(event)" class="form-inline justify-content-center">
+                <label for="towns" class="mr-2">Choose a city:</label>
+                <select id="towns" name="towns" class="form-control mr-2">
+                    <option value="Tampa">Tampa</option>
+                    <option value="Melbourne">Melbourne</option>
+                    <option value="Keywest">Key West</option>
+                    <option value="Miami">Miami</option>
+                </select>
+                <input type="submit" value="Submit" class="btn btn-primary">
+            </form>
 
+            <div class="alerts mt-4" style="font-size: medium;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <h2>Weather Alerts</h2>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+                <div id="alert"></div>
 
-       <div class="row">
-           <div class="column">
-               <div id="map"></div>
-               <script>
-                   var map = L.map('map').setView([26.076772, -80.2390038], 10);
-                   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                       maxZoom: 19,
-                       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                   }).addTo(map);
+                <script>
+                    let atRiskCities = [];
+                    what_risk();
+                    let selectedValue = "";
+                    
+                    function fillDropdown() {
+                        const dropdown = document.getElementById("towns");
+                    dropdown.innerHTML = ""; // Clear existing options
+                    atRiskCities.forEach(city => {
+                        const option = document.createElement("option");
+                        option.value = city.charAt(0).toUpperCase() + city.slice(1); // Capitalize first letter
+                        option.textContent = option.value; // Display city name
+                        dropdown.appendChild(option);
+                    });
+                }
 
+                    function getSelectedValue(event) {
+                        event.preventDefault();
+                        const dropdown = document.getElementById("towns");
+                        selectedValue = dropdown.value;
+                        getLocation();
+                    }
 
-                   var radarLayer = L.tileLayer.wms("https://mapservices.weather.noaa.gov:443/eventdriven/services/radar/radar_base_reflectivity/MapServer/WmsServer?", {
-                       layers: '1',
-                       format: 'image/png',
-                       transparent: true,
-                       attribution: '&copy; <a href="https://www.weather.gov/copyright">NOAA</a>'
-                   }).addTo(map);
-               </script>
-           </div>
-       </div>
+                    getLocation()
 
+                    function getLocation() {
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(positionSuccess, positionError);
+                        } else {
+                            document.getElementById('alert').innerText = "Geolocation not supported.";
+                        }
+                    }
 
-       <div class="text-center my-4">
-           <form onsubmit="getSelectedValue(event)" class="form-inline justify-content-center">
-               <label for="towns" class="mr-2">Choose a city:</label>
-               <select id="towns" name="towns" class="form-control mr-2">
-                   <option value="Tampa">Tampa</option>
-                   <option value="Melbourne">Melbourne</option>
-                   <option value="Keywest">Key West</option>
-                   <option value="Miami">Miami</option>
-               </select>
-               <input type="submit" value="Submit" class="btn btn-primary">
-           </form>
+                    async function positionSuccess(position) {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        const alertUrl = `https://api.weather.gov/alerts/active?area=FL`;
 
+                        try {
+                            const response = await fetch(alertUrl);
+                            const alertData = await response.json();
 
-           <div class="alerts mt-4" style="font-size: medium;">
-               <table class="table">
-                   <thead>
-                       <tr>
-                           <th>
-                               <h2>Weather Alerts</h2>
-                           </th>
-                       </tr>
-                   </thead>
-               </table>
-               <div id="alert"></div>
+                            if (alertData.features && alertData.features.length > 0) {
+                                displayAlerts(alertData.features);
+                            } else {
+                                document.getElementById('alert').innerText = 'No active alerts found.';
+                            }
+                        } catch (error) {
+                            document.getElementById('alert').innerText = 'Error retrieving alerts.';
+                        }
+                    }
 
+                    function positionError() {
+                        document.getElementById('alert').innerText = "Unable to retrieve location.";
+                    }
 
-               <script>
-                   what_risk();
-                   let selectedValue = "";
+                    function displayAlerts(alerts) {
+                        const alertDiv = document.getElementById('alert');
+                        alertDiv.innerHTML = '';
 
+                        let prevheadline = "";
+                        alerts.forEach(alert => {
+                            const properties = alert.properties;
+                            const headline = properties.headline || 'No headline available';
+                            const instruction = properties.instruction || 'No instructions provided';
+                            const cityName = headline.split(" ")[headline.split(" ").length - 2];
 
-                   function getSelectedValue(event) {
-                       event.preventDefault();
-                       const dropdown = document.getElementById("towns");
-                       selectedValue = dropdown.value;
-                       getLocation();
-                   }
+                            if (!atRiskCities.includes(cityName)) {
+                                atRiskCities.push(cityName);
+                            }
 
-
-                   getLocation()
-
-
-                   function getLocation() {
-                       if (navigator.geolocation) {
-                           navigator.geolocation.getCurrentPosition(positionSuccess, positionError);
-                       } else {
-                           document.getElementById('alert').innerText = "Geolocation not supported.";
-                       }
-                   }
-
-
-                   async function positionSuccess(position) {
-                       const lat = position.coords.latitude;
-                       const lon = position.coords.longitude;
-                       const alertUrl = `https://api.weather.gov/alerts/active?area=FL`;
-
-
-                       try {
-                           const response = await fetch(alertUrl);
-                           const alertData = await response.json();
-
-
-                           if (alertData.features && alertData.features.length > 0) {
-                               displayAlerts(alertData.features);
-                           } else {
-                               document.getElementById('alert').innerText = 'No active alerts found.';
-                           }
-                       } catch (error) {
-                           document.getElementById('alert').innerText = 'Error retrieving alerts.';
-                       }
-                   }
-
-
-                   function positionError() {
-                       document.getElementById('alert').innerText = "Unable to retrieve location.";
-                   }
-
-
-                   function displayAlerts(alerts) {
-                       const alertDiv = document.getElementById('alert');
-                       alertDiv.innerHTML = '';
-
-
-                       let prevheadline = "";
-                       alerts.forEach(alert => {
-                           const properties = alert.properties;
-                           const headline = properties.headline || 'No headline available';
-                           const instruction = properties.instruction || 'No instructions provided';
-
-
-                           if (headline.toLowerCase().includes(selectedValue.toLowerCase()) && prevheadline != headline) {
-                               const alertItem = document.createElement('div');
-                               alertItem.className = 'alert-item';
-                               alertItem.innerHTML = `
-                                   <strong>${headline}</strong>
-                                   <p>${instruction}</p>
-                               `;
-                               alertDiv.appendChild(alertItem);
-                               prevheadline = headline;
-                           }
-                       });
-                   }
-               </script>
-           </div>
-       </div>
-   </div>
+                            if (headline.toLowerCase().includes(selectedValue.toLowerCase()) && prevheadline != headline) {
+                                const alertItem = document.createElement('div');
+                                alertItem.className = 'alert-item';
+                                alertItem.innerHTML = `
+                                    <strong>${headline}</strong>
+                                    <p>${instruction}</p>
+                                `;
+                                alertDiv.appendChild(alertItem);
+                                prevheadline = headline;
+                            }
+                            fillDropdown();
+                        });
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
 </body>
-
 
 </html>
