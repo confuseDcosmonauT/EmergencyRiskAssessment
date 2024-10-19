@@ -1,0 +1,22 @@
+.main{
+    font-size: 100px;
+    font-family: "Atkinson Hyperlegible", sans-serif;
+    background-color: 27374D;
+    display: absolute;
+    color: #fcffd9;
+    width: 100%;
+    height: 100%;
+}
+
+.skip{
+    font-size: 50px; 
+    display: relative; 
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}  
+
+#map {height:600px; width:500px}
