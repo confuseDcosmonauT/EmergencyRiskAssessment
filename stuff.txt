@@ -1,0 +1,29 @@
+#familycontact-container {
+    display: none;
+}
+
+<div id="familycontact-container">
+    <p style="font-size: 16px;">Add your family contact information</p>
+    <input type="text" id="contact" placeholder="Enter phone number">
+    <br>
+    <input type="text" id="contact" placeholder="Enter phone number">
+    <br>
+    <input type="text" id="contact" placeholder="Enter phone number">
+    <br>
+    <input type="text" id="contact" placeholder="Enter phone number">
+    <br>
+    <button onclick="redirect()">Submit</button>
+</div>
+
+
+function displayContactQuestionare(){
+                document.getElementById('familycontact-container').style.display = 'block';
+            }
+
+function displayQuestion() {
+if (count < questions.length) {
+    document.getElementById('question').innerText = questions[count];
+} else {
+    if(questions[2] = 'yes'){
+        displayContactQuestionare()
+    }
