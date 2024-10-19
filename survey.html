@@ -1,9 +1,6 @@
 <html>
     <head>
         <link rel = "stylesheet" href = "main_style.css">
-        <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
         <style>
             .options {
                 margin: 1rem;
@@ -26,7 +23,20 @@
             #question{
                 padding: 70px;
             }
-
+            #question-container {
+                display: none;
+            }
+            #familycontact-container {
+                display: none;
+            }
+            #nameInput {
+            width: 300px;
+            height: 80px;  
+            font-size: 28px; 
+            }
+            #nameInput::placeholder {
+            color: #061121; /* Change placeholder text color */
+            }
 
             </style>
     </head>
@@ -37,10 +47,13 @@
               </a> 
           </header>
 
-          <div id="name">
-            <input type="text" id="nameInput" placeholder="Enter full name">
-            <button onclick="showquestions()">Submit</button>
-          </div>                
+
+         <!--Asking for name-->
+         <div id="name">
+          <input type="text" id="nameInput" placeholder="Enter full name">
+          <button onclick="showquestions()">Submit</button>
+        </div>
+       
 
         <div id="question-container">
             <div id="question">Question will appear here</div>
@@ -50,79 +63,56 @@
             </div>
         </div>
 
-
-        <script type="module">
-            // Import the functions you need from the SDKs you need
-          import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-          import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-          // TODO: Add SDKs for Firebase products that you want to use
-          // https://firebase.google.com/docs/web/setup#available-libraries
-
-          // Your web app's Firebase configuration
-          // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-          const firebaseConfig = {
-            apiKey: "AIzaSyCPCxG1321VLmhUsYYA9W_FWXuXte2Q0BM",
-            authDomain: "pluto-hacks-msd.firebaseapp.com",
-            databaseURL: "https://pluto-hacks-msd-default-rtdb.firebaseio.com",
-            projectId: "pluto-hacks-msd",
-            storageBucket: "pluto-hacks-msd.appspot.com",
-            messagingSenderId: "796752572752",
-            appId: "1:796752572752:web:e74d9b0a4e7c73e1777c55",
-            measurementId: "G-YZFX9V057B"
-          };
-
-          // Initialize Firebase
-          const app = initializeApp(firebaseConfig);
-          const db = getFirestore(app);
-
-          window.db = db;
-
-          window.addUser = async function(db, drive_ability, walk_ability, connections_ability, tools_ability, user_name) {
-              try {
-                  const docRef = await addDoc(collection(db, "Users"), {
-                    drive: drive_ability,
-                    walk: walk_ability,
-                    connections: connections_ability,
-                    tools: tools_ability,
-                    name: user_name
-                  });
-                  console.log("Document written with ID: ", docRef.id);
-                  } catch (e) {
-                      console.error("Error adding document: ", e);
-                  }
-          }
-
-      </script>
-
+        <div id="familycontact-container">
+            <p style="font-size: 16px;">Add your family contact information</p>
+            <input type="text" id="contact" placeholder="Enter phone number">
+            <br>
+            <input type="text" id="contact" placeholder="Enter phone number">
+            <br>
+            <input type="text" id="contact" placeholder="Enter phone number">
+            <br>
+            <input type="text" id="contact" placeholder="Enter phone number">
+            <br>
+            <button onclick="redirect()">Submit</button>
+        </div>
 
         <script>
+            function showquestions() {
+                    document.getElementById('question-container').style.display = 'block';
+                    document.getElementById('name').style.display = 'none';
+                    const name = document.getElementById("nameInput");
+                    console.log(name);
+                }
+
+            function nextQuestion(answer) {
+                document.getElementById('question').innerText = "You answered: " + answer;
+            }
             
             questions = [
             "Can you drive?", 
             "Can you walk?",
             "Do you have family or other people that can help you?",
-            "Do you rely on medical devices or medications?",
+            "Do you rely on medical devices or medications?"
             ];
 
             answerdata = [];
 
 
             let count = 0;
-            let name = ""
 
-
-            function showquestions() {
-                document.getElementById('question-container').style.display = 'block';
-                document.getElementById('name').style.display = 'none';
-                const name_input = document.getElementById("nameInput");
-                name = name_input.value;
+            function displayContactQuestionare(){
+                document.getElementById('familycontact-container').style.display = 'block';
             }
 
             function displayQuestion() {
             if (count < questions.length) {
                 document.getElementById('question').innerText = questions[count];
             } else {
-                //document.getElementById('question-container').innerHTML = "Are you at risk?";
+                if(questions[2] = 'yes'){
+                    displayContactQuestionare()
+                }
+                
+                
                 riskscore = 0
                 for (let i = 0; i < answerdata.length; i++) {
                     if(i >= 2){
@@ -139,17 +129,20 @@
                 
                 if(riskscore >= 30){
                     //document.getElementById('question-container').innerHTML = "RISK!!!!";
-                    window.location.href = "atrisk.html";
+                    document.getElementById('question-container').innerHTML = "HIGH RISK // this should redirect";
+                    //window.location.href = "atrisk.html"; <-- HELP
                     
                 }
                 else if(riskscore >= 10){
                     document.getElementById('question-container').innerHTML = "medium risk // on watch";
+                    //window.location.href = "semiatrisk.html";
                 }
                 else{
                     document.getElementById('question-container').innerHTML = "ur good";
+                    //window.location.href = "atnorisk.html";
                 }
                 
-                window.addUser(window.db, answerdata[0], answerdata[1], answerdata[2], answerdata[3], name);
+                addUser(db, answerdata[0], answerdata[1], answerdata[2], answerdata[3]);
 
             }
             }
@@ -164,6 +157,48 @@
         
         </script>
   
+        
+  
+        <script type="module">
+              // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
+            import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore/lite';
+            // TODO: Add SDKs for Firebase products that you want to use
+            // https://firebase.google.com/docs/web/setup#available-libraries
+
+            // Your web app's Firebase configuration
+            // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+            const firebaseConfig = {
+                apiKey: "AIzaSyCPCxG1321VLmhUsYYA9W_FWXuXte2Q0BM",
+                authDomain: "pluto-hacks-msd.firebaseapp.com",
+                databaseURL: "https://pluto-hacks-msd-default-rtdb.firebaseio.com",
+                projectId: "pluto-hacks-msd",
+                storageBucket: "pluto-hacks-msd.appspot.com",
+                messagingSenderId: "796752572752",
+                appId: "1:796752572752:web:e74d9b0a4e7c73e1777c55",
+                measurementId: "G-YZFX9V057B"
+              };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
+            const db = getFirestore(app);
+
+            async function addUser(db, drive_ability, walk_ability, connections_ability, tools_ability) {
+                try {
+                    const docRef = await addDoc(collection(db, "Users"), {
+                      drive: drive_ability,
+                      walk: walk_ability,
+                      connections: connections_ability,
+                      tools: tools_ability
+                    });
+                    console.log("Document written with ID: ", docRef.id);
+                    } catch (e) {
+                        console.error("Error adding document: ", e);
+                    }
+            }
+
+        </script>
     </body>
 </html>
-
