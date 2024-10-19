@@ -15,7 +15,7 @@ function two_click() {
     console.log("testing", counter)
     counter++;
     if (counter >= 2) {
-        window.location.href = "survey_ONE.html?blind=1";
+        window.location.href = "survey.html?blind=1";
     }
 }
 
