@@ -1,132 +1,308 @@
-<html>
-    <head>
-        <link rel = "stylesheet" href = "admin_style.css">
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-            crossorigin=""/>
-    </head>
-    <body class="main">
+<!DOCTYPE html>
+<html lang="en">
 
-        <header id = "header">
-                <img src="logo.png" alt="logo" style="width:150px;height:150px;" class = "logo">
-              </a> 
-          </header>
-
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-        crossorigin=""></script>
-        <div>
-            admins view
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th >Name</th>
-                    <th >Connections</th>
-                    <th >Drive</th>
-                    <th >Tools</th>
-                    <th >Walk</th>
-                </tr>
-            </thead>
-            <tbody class="table_display">
-                <!-- Rows will be dynamically added here -->
-            </tbody>
-        </table>
-        <div>
-            please refresh for new entries!
-        </div>
-        <div class="column">
-            <!--<embed type="text/html" src="https://floridadisaster.maps.arcgis.com/apps/instant/lookup/index.html?appid=aa18a2d8737c4d66bb6434a09e17203a" width="500" height="650"> -->
-                <div id="map"></div>
-                
-        </div>
-    </div>
-
-        <script type="module">
-            // Import the functions you need from the SDKs you need
-          import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-          import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-          // TODO: Add SDKs for Firebase products that you want to use
-          // https://firebase.google.com/docs/web/setup#available-libraries
-
-          // Your web app's Firebase configuration
-          // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-          const firebaseConfig = {
-            apiKey: "AIzaSyCPCxG1321VLmhUsYYA9W_FWXuXte2Q0BM",
-            authDomain: "pluto-hacks-msd.firebaseapp.com",
-            databaseURL: "https://pluto-hacks-msd-default-rtdb.firebaseio.com",
-            projectId: "pluto-hacks-msd",
-            storageBucket: "pluto-hacks-msd.appspot.com",
-            messagingSenderId: "796752572752",
-            appId: "1:796752572752:web:e74d9b0a4e7c73e1777c55",
-            measurementId: "G-YZFX9V057B"
-          };
-
-          // Initialize Firebase
-          const app = initializeApp(firebaseConfig);
-          const db = getFirestore(app);
-
-            async function retrieveUser() {
-            const tableBody = document.querySelector(".table_display")
-            tableBody.innerHTML = "";
-
-            const querySnapshot = await getDocs(collection(db, "Users"));
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                const row = document.createElement("tr");
-
-                const nameCell = document.createElement("td");
-                nameCell.textContent = data.name || "N/A";
-                row.appendChild(nameCell);
-
-                const connectionsCell = document.createElement("td");
-                connectionsCell.textContent = data.connections || "N/A";
-                row.appendChild(connectionsCell);
-
-                const driveCell = document.createElement("td");
-                driveCell.textContent = data.drive || "N/A";
-                row.appendChild(driveCell);
-
-                const toolsCell = document.createElement("td");
-                toolsCell.textContent = data.tools || "N/A";
-                row.appendChild(toolsCell);
-
-                const walkCell = document.createElement("td");
-                walkCell.textContent = data.walk || "N/A";
-                row.appendChild(walkCell);
-
-                tableBody.appendChild(row);
-
-            });
-          }
-          window.onload = retrieveUser(); 
-      </script>
-
-      <script>
-        var map = L.map('map').setView([26.0802, -80.2508], 13);
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-         }).addTo(map);
-
-
-        //add National Weather Service Radar tiles
-        L.tileLayer('https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_qcd/{z}/{x}/{y}.png', {
-        maxZoom: 12,
-        attribution: '&copy; <a href="https://www.weather.gov">NOAA/NWS</a>'
-         }).addTo(map);
-
-        if (navigator.geolocation) {
-            let position = navigator.geolocation.getCurrentPosition();
-            let latitude = position.coords.latitude;
-            let longitude = position.coords.longitude;
-        } else {
-            console.log("Geolocation cannot get your location");
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main_style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <style>
+        * {
+            box-sizing: border-box;
         }
 
+        body {
+            position: relative;
+        }
+
+        .header {
+            position: relative;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 60px;
+            height: 60px;
+        }
+
+        .translate-container {
+            position: absolute; /* Change to absolute for better control */
+            top: 10px; /* Match this value with the logo's top position */
+            right: 10px; /* Position it at the right */
+        }
+
+        .column {
+            width: 100%;
+            padding: 1rem;
+        }
+
+        .resizable-div {
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .resizable-text {
+            font-size: 5vw;
+            margin: 0;
+        }
+
+        #riskBox {
+            background-color: #7c4c4c;
+            padding: 1rem;
+        }
+
+        #map {
+            width: 100%;
+            height: 600px;
+            margin-top: 1rem;
+        }
+
+        .table thead th {
+            background-color: #7c4c4c;
+            color: #ffffff;
+        }
+
+        .alert-item {
+            margin-bottom: 3rem;
+        }
+    </style>
+</head>
+
+<body class="main">
+    <header class="header text-center my-3">
+        <a href="main.html">
+            <img src="logo.png" alt="logo" class="logo">
+        </a>
+        
+        <div class="translate-container" id="google_translate_element"></div>
+    </header>
+
+    <!-- Google Translate API -->
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,es,ht,vi,ar,pt,zh-CN,ru',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script>
+        what_risk();
+
+        function what_risk() {
+            const parameters = new URLSearchParams(window.location.search);
+            if (parameters.has('high_risk')) {
+                document.body.style.backgroundColor = "#88342b";
+                document.getElementById('subtext').innerHTML = "We will send your information to local disaster relief organizations";
+            }
+            if (parameters.has('medium_risk')) {
+                document.body.style.backgroundColor = "#ca7e37";
+                document.body.style.color = "#100e45";
+                document.getElementById("riskBox").style.backgroundColor = "#f5b342";
+                document.getElementById('alerttext').innerHTML = " Medium Risk";
+                document.getElementById('subtext').innerHTML = "We will send your information to local disaster relief organizations to keep on watch in case of change in weather";
+            }
+            if (parameters.has('low_risk')) {
+                document.body.style.backgroundColor = "#27374D";
+                document.body.style.color = "#7db0f7";
+                document.getElementById("riskBox").style.backgroundColor = "#36274d";
+                document.getElementById('alerttext').innerHTML = " Low Risk";
+                document.getElementById('subtext').innerHTML = "You are in a safe zone";
+
+            }
+        }
     </script>
 
-    </body>
+    <div class="container">
+        <div class="row">
+            <div class="column">
+                <div id="riskBox">
+                    <div class="resizable-div">
+                        <p class="resizable-text" id="alerttext">YOU ARE AT RISK!</p>
+                        <p class="resizable-text" id="subtext" style="font-size: 2vw">We will send your information to local disaster relief organizations...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="column">
+                <div id="map"></div>
+                <script>
+
+
+                    var map = L.map('map').setView([26.076772, -80.2390038], 10);
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    }).addTo(map);
+
+                    var radarLayer = L.tileLayer.wms("https://mapservices.weather.noaa.gov:443/eventdriven/services/radar/radar_base_reflectivity/MapServer/WmsServer?", {
+                        layers: '1',
+                        format: 'image/png',
+                        transparent: true,
+                        attribution: '&copy; <a href="https://www.weather.gov/copyright">NOAA</a>'
+                    }).addTo(map);
+
+                    var markerAdmin = L.marker([26.0802, -80.2508]).addTo(map)
+                        .bindPopup(`You are here`)
+                        .openPopup();
+
+                    var markerPersonOne = L.marker([26.331095, -80.289170]).addTo(map)
+                        .bindPopup(`Grace W. is here`)
+                        .openPopup();
+
+                    var markerPersonTwo =  L.marker([26.071512, -80.229861]).addTo(map)
+                        .bindPopup(`Polly W. is here`)
+                        .openPopup();
+
+                    var markerPersonThree =  L.marker([26.0, -80.2508]).addTo(map)
+                        .bindPopup(`Cat is here`)
+                        .openPopup();
+                </script>
+            </div>
+        </div>
+
+        <div class="text-center my-4">
+            <form onsubmit="getSelectedValue(event)" class="form-inline justify-content-center">
+                <label for="towns" class="mr-2">Choose a city:</label>
+                <select id="towns" name="towns" class="form-control mr-2"></select>
+                <input type="submit" value="Submit" class="btn btn-primary">
+            </form>
+
+            <div class="alerts mt-4" style="font-size: medium;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <h2>Weather Alerts</h2>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+                <div id="alert"></div>
+
+                <script>
+                    let atRiskCities = [];
+                    what_risk();
+                    let selectedValue = "";
+                    
+                    function fillDropdown() {
+                        const dropdown = document.getElementById("towns");
+                    dropdown.innerHTML = ""; // Clear existing options
+                    atRiskCities.forEach(city => {
+                        const option = document.createElement("option");
+                        option.value = city.charAt(0).toUpperCase() + city.slice(1); // Capitalize first letter
+                        option.textContent = option.value; // Display city name
+                        dropdown.appendChild(option);
+                    });
+                }
+
+                    function getSelectedValue(event) {
+                        event.preventDefault();
+                        const dropdown = document.getElementById("towns");
+                        selectedValue = dropdown.value;
+                        getLocation();
+                    }
+
+                    getLocation()
+
+                    function getLocation() {
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(positionSuccess, positionError);
+                        } else {
+                            document.getElementById('alert').innerText = "Geolocation not supported.";
+                        }
+                    }
+
+                    async function positionSuccess(position) {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        const alertUrl = `https://api.weather.gov/alerts/active?area=FL`;
+
+                        try {
+                            const response = await fetch(alertUrl);
+                            const alertData = await response.json();
+
+                            if (alertData.features && alertData.features.length > 0) {
+                                displayAlerts(alertData.features);
+                            } else {
+                                document.getElementById('alert').innerText = 'No active alerts found.';
+                            }
+                        } catch (error) {
+                            document.getElementById('alert').innerText = 'Error retrieving alerts.';
+                        }
+                    }
+
+                    function positionError() {
+                        document.getElementById('alert').innerText = "Unable to retrieve location.";
+                    }
+
+                     function displayAlerts(alerts) {
+                        const alertDiv = document.getElementById('alert');
+                        alertDiv.innerHTML = '';
+
+                        let prevheadline = "";
+                        alerts.forEach(alert => {
+                            const properties = alert.properties;
+                            const headline = properties.headline || 'No headline available';
+                            const instruction = properties.instruction || 'No instructions provided';
+                            
+                            /*const cityName = headline.split(" ")[headline.split(" ").length - 2];
+
+                            if (!atRiskCities.includes(cityName)) {
+                                atRiskCities.push(cityName);
+                            } */
+                            let cityName = ""
+                            let words = headline.split(" ");
+                            startInd = words.indexOf("NWS") + 1;
+                            endInd = words.length() - 2;
+                            for (i = startInd; i <= endInd; i++) {
+                                cityName += words[i] + " ";
+                                console.log(i);
+                                console.log(cityName);
+                            }
+                            if (!atRiskCities.includes(cityName)) {
+                                atRiskCities.push(cityName);
+                            }
+                            
+
+                            if (headline.toLowerCase().includes(selectedValue.toLowerCase()) && prevheadline != headline) {
+                                const alertItem = document.createElement('div');
+                                alertItem.className = 'alert-item';
+                                alertItem.innerHTML = `
+                                    <strong>${headline}</strong>
+                                    <p>${instruction}</p>
+                                `;
+                                alertDiv.appendChild(alertItem);
+                                prevheadline = headline;
+                            }
+                            fillDropdown();
+                        });
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>
-
-
