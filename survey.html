@@ -1,4 +1,3 @@
-
 <html>
     <head>
         <link rel = "stylesheet" href = "main_style.css">
@@ -22,7 +21,8 @@
             body{text-align: center;}
 
             button{
-                font-size: 50pt;
+                font-size: 28px;
+                height: 80px;
             }
             #question{
                 padding: 70px;
@@ -45,10 +45,9 @@
             }
 
             </style>
-
-        <script src = "main_script.js"></script>
     </head>
     <body class = "main">
+        
         <header>
             <a href="main.html">
                 <img src="logo.png" alt="logo" style="width:150px;height:150px;">
@@ -67,6 +66,7 @@
             <button class="option btn" onclick="nextQuestion('no')">No</button>
             </div>
         </div>
+
 
         <script type="module">
             // Import the functions you need from the SDKs you need
@@ -110,10 +110,16 @@
           }
 
       </script>
+
+        <audio id="myAudio">
+            <source src="doyouhavecar.mp3" type="audio/mpeg">
+            <source src="doyouhavecar.ogg" type="audio/ogg">
+            Your browser does not support the audio element.
+        </audio>
+
+
         <script>
             
-            check_if_blind();
-
             questions = [
             "Can you drive?", 
             "Can you walk?",
@@ -133,10 +139,19 @@
                 document.getElementById('name').style.display = 'none';
                 const name_input = document.getElementById("nameInput");
                 name = name_input.value;
-                read_blind();
             }
 
             function displayQuestion() {
+                /* 
+                // this code breaks the questionare
+                const audio = document.getElementById('myAudio');
+
+                if(blind ){ // how to get blind variable from main.html
+                    if(count = 0){
+                        audio.play(); // read out first audio prompt
+                    }
+                }
+            */
             if (count < questions.length) {
                 document.getElementById('question').innerText = questions[count];
             } else {
@@ -155,16 +170,16 @@
                     }
                 }
                 
-                if(riskscore >= 20){
-                    document.getElementById('question-container').innerHTML = "RISK!!!!";
+                if(riskscore >= 30){
+                    //document.getElementById('question-container').innerHTML = "RISK!!!!";
                     window.location.href = "atrisk.html";
                     
                 }
                 else if(riskscore >= 10){
-                    document.getElementById('question-container').innerHTML = "Medium risk // on watch";
+                    document.getElementById('question-container').innerHTML = "medium risk // on watch";
                 }
                 else{
-                    document.getElementById('question-container').innerHTML = "You are safe";
+                    document.getElementById('question-container').innerHTML = "ur good";
                 }
                 
                 window.addUser(window.db, answerdata[0], answerdata[1], answerdata[2], answerdata[3], name);
@@ -175,7 +190,6 @@
             function nextQuestion(answer) {
                 answerdata[count] = answer;
                 count++;
-                read_blind();
                 displayQuestion();
             }
 
