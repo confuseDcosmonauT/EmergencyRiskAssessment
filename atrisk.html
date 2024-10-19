@@ -179,12 +179,12 @@
                 <input type="submit" value="Submit" class="btn btn-primary">
             </form>
 
-            <div class="alerts mt-4" style="font-size: medium;" hidden="true" id="weatherTog">
+            <div class="alerts mt-4" style="font-size: large;" hidden="true" id="weatherTog">
                 <table class="table">
                     <thead>
                         <tr>
                             <th>
-                                <h2>Weather Alerts</h2>
+                                <h2 id="weatherTableTitle">Weather Alerts for ${selectedValue}</h2>
                             </th>
                         </tr>
                     </thead>
@@ -251,6 +251,8 @@
                      function displayAlerts(alerts) {
                         const alertDiv = document.getElementById('alert');
                         alertDiv.innerHTML = '';
+
+                        document.getElementById("weatherTableTitle").innerHTML = 'Weather in ' + selectedValue;
 
                         let prevheadline = "";
                         alerts.forEach(alert => {
