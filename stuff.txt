@@ -1,29 +1,42 @@
-#familycontact-container {
-    display: none;
-}
-
-<div id="familycontact-container">
-    <p style="font-size: 16px;">Add your family contact information</p>
-    <input type="text" id="contact" placeholder="Enter phone number">
-    <br>
-    <input type="text" id="contact" placeholder="Enter phone number">
-    <br>
-    <input type="text" id="contact" placeholder="Enter phone number">
-    <br>
-    <input type="text" id="contact" placeholder="Enter phone number">
-    <br>
-    <button onclick="redirect()">Submit</button>
-</div>
-
-
-function displayContactQuestionare(){
-                document.getElementById('familycontact-container').style.display = 'block';
-            }
-
 function displayQuestion() {
-if (count < questions.length) {
-    document.getElementById('question').innerText = questions[count];
-} else {
-    if(questions[2] = 'yes'){
-        displayContactQuestionare()
-    }
+            if (count < questions.length) {
+                document.getElementById('question').innerText = questions[count];
+            } else {
+                if(questions[2] = 'yes'){
+                    displayContactQuestionare()
+                }
+                
+                
+                riskscore = 0
+                for (let i = 0; i < answerdata.length; i++) {
+                    if(i >= 2){
+                        if(answerdata[i] == 'no'){
+                        riskscore += 10
+                        }
+                    }
+                    else{
+                        if(answerdata[i] == 'yes'){
+                        riskscore += 10
+                        }
+                    }
+                }
+                
+                if(riskscore >= 30){
+                    //document.getElementById('question-container').innerHTML = "RISK!!!!";
+                    document.getElementById('question-container').innerHTML = "HIGH RISK // this should redirect";
+                    //window.location.href = "atrisk.html"; <-- HELP
+                    
+                }
+                else if(riskscore >= 10){
+                    document.getElementById('question-container').innerHTML = "medium risk // on watch";
+                    //window.location.href = "semiatrisk.html";
+                }
+                else{
+                    document.getElementById('question-container').innerHTML = "ur good";
+                    //window.location.href = "atnorisk.html";
+                }
+                
+                addUser(db, answerdata[0], answerdata[1], answerdata[2], answerdata[3]);
+
+            }
+            }
