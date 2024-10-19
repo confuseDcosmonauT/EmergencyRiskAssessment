@@ -4,7 +4,7 @@
         <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"></script>
         <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-        <style>
+              <style>
             .options {
                 margin: 1rem;
                 padding: 2rem 2rem;
@@ -18,14 +18,31 @@
                 vertical-align: middle;
             }
 
+            .logo{
+                align-items: center;
+            }
+
             body{text-align: center;}
 
             button{
-                font-size: 28px;
-                height: 80px;
+                font-size: 28pt;
+                background-color: #223044;
+                color: #fcffd9;
+                border-radius: 3px;
+                width:fit-content;
+                height:fit-content;
+                border: none;
+
+            }
+
+
+            button:hover{
+                background-color: 526D82;
+                color: DDE6ED;
+                transition: background-color 0.7s ease;
             }
             #question{
-                padding: 70px;
+                padding: 5px;
             }
 
             #question-container {
@@ -37,8 +54,13 @@
             }
             #nameInput {
             width: 300px;
-            height: 80px;  
+            height: 75px;  
             font-size: 28px; 
+            
+            #name {
+                align-items: center;
+            }
+
             }
             #nameInput::placeholder {
             color: #061121; /* Change placeholder text color */
