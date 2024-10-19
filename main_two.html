@@ -1,14 +1,15 @@
 <html>
     <head>
-        <link rel = "stylesheet" href = "main_style.css">
+        <link rel = "stylesheet" href = "admin_style.css">
     </head>
-    <body>
+    <body class="main">
         <div>
             admins view
         </div>
         <table>
             <thead>
                 <tr>
+                    <th>Name</th>
                     <th>Connections</th>
                     <th>Drive</th>
                     <th>Tools</th>
@@ -19,8 +20,8 @@
                 <!-- Rows will be dynamically added here -->
             </tbody>
         </table>
-        <div onclick="retrieveUser()">
-            refresh
+        <div>
+            please refresh for new entries!
         </div>
 
         <script type="module">
@@ -56,6 +57,10 @@
                 const data = doc.data();
                 const row = document.createElement("tr");
 
+                const nameCell = document.createElement("td");
+                nameCell.textContent = data.name || "N/A";
+                row.appendChild(nameCell);
+
                 const connectionsCell = document.createElement("td");
                 connectionsCell.textContent = data.connections || "N/A";
                 row.appendChild(connectionsCell);
@@ -76,8 +81,6 @@
 
             });
           }
-          retrieveUser()
-
           window.onload = retrieveUser(); 
       </script>
 
