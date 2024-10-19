@@ -125,7 +125,7 @@
                 <option value="Gibsonton">Gibsonton</option>
                 <option value="Keywest">Key West</option>
                 <option value="Miami">Miami</option>
-                <option value="Sarasota">Lakeland</option>
+                <option value="Lakeland">Lakeland</option>
             </select>
             <br></br>
             <button onclick="showquestions()">Submit</button>
@@ -148,9 +148,16 @@
 
             let count = 0;
             let name = ""
-
+            let town = ""
 
             function showquestions() {
+                event.preventDefault(); // Prevent form submission to allow custom behavior
+                const selectElement = document.getElementById('towns');
+                const town = selectElement.value;
+                console.log('Selected town:', town);
+
+
+
                 document.getElementById('question-container').style.display = 'block';
                 document.getElementById('name').style.display = 'none';
                 document.getElementById('findtown').style.display = 'none';
@@ -186,23 +193,26 @@
                         }
                     }
                 }
-                // if(town == "sarasota or miami somwehre close to shoer")
-                // add 10 pts to risk score !!!!!!!!!!!!!
+
+                
+                if(town == "Sarasota" || town == "Miami" || town == "Gibsonton" || town == "Keywest"){
+                    if(riskscore >= 20){
+                    //document.getElementById('question-container').innerHTML = "RISK!!!!";
+                    window.location.href = "atrisk.html?high_risk=1";
+                    }
+                    else{
+                        //document.getElementById('question-container').innerHTML = "medium risk // on watch";
+                        window.location.href = "atrisk.html?medium_risk=1";
+                    }
+                }
+                else{
+                    //document.getElementById('question-container').innerHTML = "your safe!";
+                    window.location.href = "atrisk.html?low_risk=1";
+                }
         
 
                 
-                if(riskscore >= 20){
-                    //document.getElementById('question-container').innerHTML = "RISK!!!!";
-                    window.location.href = "atrisk.html?high_risk=1";
-                }
-                else if(riskscore >= 10){
-                    document.getElementById('question-container').innerHTML = "medium risk // on watch";
-                    window.location.href = "atrisk.html?medium_risk=1";
-                }
-                else{
-                    document.getElementById('question-container').innerHTML = "your safe!";
-                    window.location.href = "atrisk.html?low_risk=1";
-                }
+                
                 
                 window.addUser(window.db, answerdata[0], answerdata[1], answerdata[2], answerdata[3], name);
 
