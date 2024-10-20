@@ -1,3 +1,8 @@
+PlutoHacks 2024 WINNER
+
+Link to DevPost: https://devpost.com/software/alert-gyo0xw
+
+
 ## Inspiration
 *We were inspired by recent hurricanes and other disasters causing areas to be isolated.  These hard-to-reach areas prevented many, especially disabled and elderly, to not get the medication they need in time.  Many rescue workers also had to break into homes to find victims, some barely able to walk, unable to leave their homes, and did not have enough supplies to last.  We wanted to alleviate some of the causes/effects and the main demographic that may be vulnerable to this situation.*
 
